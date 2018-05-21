@@ -3,12 +3,18 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans     
 	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd    
 	http://www.springframework.org/schema/context    
 	http://www.springframework.org/schema/context/spring-context-3.2.xsd    
 	http://www.springframework.org/schema/tx
     http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+    http://www.springframework.org/schema/cache
+    http://www.springframework.org/schema/cache/spring-cache.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
     ">
 
 	<!-- spring3 @value 特性加载属性文件内容 -->
@@ -16,7 +22,7 @@
 	<!-- 使用spring注解-->
 	<context:annotation-config />
 	<!-- spring扫描目录 -->
-	<context:component-scan base-package="com.persagy">
+	<context:component-scan base-package="com.gemo">
 		<!-- 不包括@Controller -->
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
@@ -62,6 +68,20 @@
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
     	<property name="dataSource" ref="dataSource"/>
 	</bean>
+	
+	<!--  缓存  属性-->  
+    <bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation"  value="classpath:config/ehcache/ehcache.xml"/>
+    </bean>
+      
+    <!-- 默认是cacheManager -->  
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager"  ref="cacheManagerFactory"/>    
+    </bean>
+    
+     <!-- 支持缓存注解 -->  
+    <cache:annotation-driven cache-manager="cacheManager"/>
+	
 	
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 

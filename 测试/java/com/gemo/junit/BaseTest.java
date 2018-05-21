@@ -28,7 +28,7 @@ public abstract class BaseTest extends AbstractJUnit4SpringContextTests {
 	private static Logger log = Logger.getLogger(BaseTest.class);
 	@Resource
 	protected SystemSetting systemSetting;
-
+	 
 	@Resource(name = "coreService")
 	protected CoreService coreService;
 
